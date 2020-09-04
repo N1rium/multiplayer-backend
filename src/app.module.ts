@@ -12,6 +12,8 @@ import { Match } from './match/dto/match.dto';
 import { Elo } from './elo/dto/elo.dto';
 import { MatchParticipantModule } from './match-participant/match-participant.module';
 import { MatchParticipant } from './match-participant/dto/match-participant.dto';
+import { NotificationModule } from './notification/notification.module';
+import { Notification } from './notification/dto/notification.dto';
 require('dotenv').config();
 
 @Module({
@@ -21,6 +23,7 @@ require('dotenv').config();
     MatchModule,
     EloModule,
     MatchParticipantModule,
+    NotificationModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
@@ -29,7 +32,7 @@ require('dotenv').config();
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
       extra: { ssl: { rejectUnauthorized: false } },
-      entities: [User, Game, Match, MatchParticipant, Elo],
+      entities: [User, Game, Match, MatchParticipant, Elo, Notification],
       synchronize: true,
       autoLoadEntities: true,
     }),
