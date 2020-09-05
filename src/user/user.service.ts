@@ -4,10 +4,11 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import * as jwt from 'jsonwebtoken';
 import * as crypto from 'crypto';
-import { User, CreateUserInput } from './dto/user.dto';
+import { User } from './dto/user.dto';
+import { CreateUser } from './dto/create-user.dto';
 require('dotenv').config();
 
 @Injectable()
@@ -34,10 +35,18 @@ export class UserService {
     return token;
   }
 
+  async all(): Promise<User[]> {
+    return this.userRepository.find();
+  }
+
   async byId(id: string): Promise<User> {
     const user = await this.userRepository.findOne(id);
     if (!user) throw new NotFoundException();
     return user;
+  }
+
+  async byIds(ids: string[]): Promise<User[]> {
+    return this.userRepository.find({ where: { id: In(ids) } });
   }
 
   async userByEmail(email: string): Promise<User> {
@@ -46,7 +55,7 @@ export class UserService {
     return user;
   }
 
-  async createUser(input: CreateUserInput): Promise<User> {
+  async createUser(input: CreateUser): Promise<User> {
     const { username, email, password, passwordRepeat } = input;
     if (password !== passwordRepeat)
       throw new BadRequestException({ message: 'Password mismatch' });

@@ -1,23 +1,40 @@
-import { Controller, Get, Param, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  Body,
+  UseInterceptors,
+  ClassSerializerInterceptor,
+} from '@nestjs/common';
 import { UserService } from './user.service';
-import { User, CreateUserInput } from './dto/user.dto';
+import { User } from './dto/user.dto';
+import { ApiTags } from '@nestjs/swagger';
+import { CreateUser } from './dto/create-user.dto';
 
+@ApiTags('user')
 @Controller('user')
+@UseInterceptors(ClassSerializerInterceptor)
 export class UserController {
   constructor(private readonly service: UserService) {}
 
+  @Get('')
+  all(): Promise<User[]> {
+    return this.service.all();
+  }
+
   @Get(':id')
-  async findById(@Param() params): Promise<User> {
-    return this.service.byId(params.id);
+  findById(@Param('id') id: string): Promise<User> {
+    return this.service.byId(id);
   }
 
   @Get('email/:email')
-  async findByEmail(@Param() params): Promise<User> {
+  findByEmail(@Param() params): Promise<User> {
     return this.service.userByEmail(params.email);
   }
 
   @Post()
-  async create(@Body() payload: CreateUserInput): Promise<User> {
+  create(@Body() payload: CreateUser): Promise<User> {
     return this.service.createUser(payload);
   }
 }
