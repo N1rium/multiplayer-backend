@@ -37,4 +37,9 @@ export class UserController {
   create(@Body() payload: CreateUser): Promise<User> {
     return this.service.createUser(payload);
   }
+
+  @Post('/byIds')
+  findByIds(@Body() ids: string[]): Promise<User[]> {
+    return this.service.byIds(ids);
+  }
 }

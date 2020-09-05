@@ -63,13 +63,14 @@ export class UserService {
     const encrypted = this.saltHashPassword(password);
     const { salt, passwordHash } = encrypted;
 
-    const user = await this.userRepository.save({
+    const user = this.userRepository.create({
       username,
       email,
       password: passwordHash,
       salt,
     });
 
+    await this.userRepository.save(user);
     return user;
   }
 
