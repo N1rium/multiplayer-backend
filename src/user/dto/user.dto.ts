@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { Exclude } from 'class-transformer';
 import { Elo } from 'src/elo/dto/elo.dto';
 import { MatchParticipant } from 'src/match-participant/dto/match-participant.dto';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class User {
@@ -11,6 +11,7 @@ export class User {
   @Column('varchar', { length: 50 })
   username: string;
 
+  @Exclude()
   @Column('varchar', { length: 50, unique: true })
   email: string;
 
@@ -33,11 +34,4 @@ export class User {
     participants => participants.user,
   )
   participants: MatchParticipant[];
-}
-
-export class CreateUserInput {
-  username: string;
-  email: string;
-  password: string;
-  passwordRepeat: string;
 }
