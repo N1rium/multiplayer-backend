@@ -19,5 +19,8 @@ export class MatchParticipant {
   match: Match;
 
   @Column({ type: 'integer', default: 0 })
+  score: number;
+
+  @Column({ type: 'integer', default: 0 })
   eloChange: number;
 }
