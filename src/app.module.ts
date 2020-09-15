@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, ClassSerializerInterceptor } from '@nestjs/common';
 import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/dto/user.dto';
@@ -12,6 +12,7 @@ import { MatchParticipantModule } from './match-participant/match-participant.mo
 import { MatchParticipant } from './match-participant/dto/match-participant.dto';
 import { NotificationModule } from './notification/notification.module';
 import { Notification } from './notification/dto/notification.dto';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 require('dotenv').config();
 
 @Module({
@@ -34,6 +35,12 @@ require('dotenv').config();
       synchronize: true,
       autoLoadEntities: true,
     }),
+  ],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ClassSerializerInterceptor,
+    },
   ],
 })
 export class AppModule {}
