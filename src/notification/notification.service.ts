@@ -27,16 +27,22 @@ export class NotificationService {
   }
 
   async user(userId: string): Promise<Notification[]> {
-    return this.notificationRepository.find({
-      relations: ['users'],
-      where: { id: userId },
-    });
+    return this.notificationRepository
+      .createQueryBuilder('n')
+      .innerJoin('n.users', 'u')
+      .where('u.id = :userId')
+      .setParameter('userId', userId)
+      .getMany();
   }
 
   async create(data: CreateNotification): Promise<Notification> {
-    const notification = Notification.build(data);
     const users = await this.userService.byIds(data.userIds);
-    notification.users = users;
+    const notification = this.notificationRepository.create({
+      title: data.title,
+      description: data.description,
+      users,
+      data: data.data,
+    });
     return this.notificationRepository.save(notification);
   }
 

@@ -19,8 +19,8 @@ export class NotificationController {
     return this.service.create(data);
   }
 
-  @Post('/:id/read')
-  read(@Param('id') ids: string[]): Promise<Notification[]> {
-    return this.service.read(ids);
+  @Post('/read')
+  read(@Body() data: string[]): Promise<Notification[]> {
+    return this.service.read(data);
   }
 }

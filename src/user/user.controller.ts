@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  Param,
-  Post,
-  Body,
-  UseInterceptors,
-  ClassSerializerInterceptor,
-} from '@nestjs/common';
+import { Controller, Get, Param, Post, Body } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './dto/user.dto';
 import { ApiTags } from '@nestjs/swagger';
@@ -14,7 +6,6 @@ import { CreateUser } from './dto/create-user.dto';
 
 @ApiTags('user')
 @Controller('user')
-@UseInterceptors(ClassSerializerInterceptor)
 export class UserController {
   constructor(private readonly service: UserService) {}
 
