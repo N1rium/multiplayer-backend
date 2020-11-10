@@ -1,5 +1,5 @@
 export enum MatchState {
-  ACTIVE,
-  FINISHED,
-  CANCELLED,
+  ACTIVE = 'ACTIVE',
+  FINISHED = 'FINISHED',
+  CANCELLED = 'CANCELLED',
 }

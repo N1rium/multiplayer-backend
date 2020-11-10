@@ -38,8 +38,6 @@ export class NotificationService {
   async create(data: CreateNotification): Promise<Notification> {
     const users = await this.userService.byIds(data.userIds);
     const notification = this.notificationRepository.create({
-      title: data.title,
-      description: data.description,
       users,
       data: data.data,
     });

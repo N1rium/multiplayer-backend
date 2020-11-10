@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateGame {
+export class ReportScore {
   @ApiProperty()
-  name: string;
+  scoreValue: number;
 
   @ApiProperty()
-  displayValues: { [key: string]: any };
+  scoreString: string;
 }

@@ -4,23 +4,30 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, In } from 'typeorm';
+import { Repository, In, Like } from 'typeorm';
 import * as jwt from 'jsonwebtoken';
 import * as crypto from 'crypto';
 import { User } from './dto/user.dto';
 import { CreateUser } from './dto/create-user.dto';
+import { LoginDto } from './dto/login.dto';
+import {
+  Notification,
+  NotificationType,
+} from 'src/notification/dto/notification.dto';
 require('dotenv').config();
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(Notification)
+    private notificationRepository: Repository<Notification>,
   ) {}
 
-  async login(email: string, password: string): Promise<string> {
-    const user = await this.userByEmail(email);
+  async login(body: LoginDto): Promise<any> {
+    const user = await this.userByEmail(body.email);
     const { salt, password: storedPassword } = user;
-    const encrypted = this.sha512(password, salt);
+    const encrypted = this.sha512(body.password, salt);
 
     if (storedPassword !== encrypted.passwordHash)
       throw new BadRequestException({ message: 'Wrong password' });
@@ -32,11 +39,22 @@ export class UserService {
       },
       process.env.JWT_SECRET,
     );
-    return token;
+    return { token };
+  }
+
+  async search(value: string): Promise<User[]> {
+    return this.userRepository.find({
+      username: Like(`%${value}%`),
+    });
   }
 
   async all(): Promise<User[]> {
     return this.userRepository.find();
+  }
+
+  async fromToken(token: string): Promise<User> {
+    if (!token) throw new BadRequestException({ message: 'No token provided' });
+    return this.byId(jwt.verify(token, process.env.JWT_SECRET).id);
   }
 
   async byId(id: string): Promise<User> {
@@ -56,7 +74,15 @@ export class UserService {
   }
 
   async createUser(input: CreateUser): Promise<User> {
-    const { username, email, password, passwordRepeat } = input;
+    const {
+      username = null,
+      email = null,
+      password = null,
+      passwordRepeat = null,
+    } = input;
+
+    if (!username || !email || !password) throw new BadRequestException();
+
     if (password !== passwordRepeat)
       throw new BadRequestException({ message: 'Password mismatch' });
 
@@ -71,6 +97,12 @@ export class UserService {
     });
 
     await this.userRepository.save(user);
+    const notification = this.notificationRepository.create({
+      users: [user],
+      type: NotificationType.USER_REGISTER,
+      data: {},
+    });
+    await this.notificationRepository.save(notification);
     return user;
   }
 

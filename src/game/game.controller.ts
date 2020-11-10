@@ -1,25 +1,31 @@
-import { Controller, Get, Param, Post, Body } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Patch } from '@nestjs/common';
 import { GameService } from './game.service';
 import { Game } from './dto/game.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateGame } from './dto/create-game.dto';
+import { UpdateGameDto } from './dto/update-game.dto';
 
 @ApiTags('game')
 @Controller('game')
 export class GameController {
   constructor(private readonly service: GameService) {}
 
-  @Get('')
+  @Get()
   all(): Promise<Game[]> {
     return this.service.all();
   }
 
   @Get(':id')
-  findById(@Param() params): Promise<Game> {
-    return this.service.byId(params.id);
+  findById(@Param('id') id): Promise<Game> {
+    return this.service.byId(id);
   }
 
-  @Post('')
+  @Patch('/:id')
+  update(@Param('id') id: string, @Body() data: UpdateGameDto): Promise<Game> {
+    return this.service.update(id, data);
+  }
+
+  @Post()
   create(@Body() data: CreateGame): Promise<Game> {
     return this.service.create(data);
   }

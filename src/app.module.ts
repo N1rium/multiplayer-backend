@@ -13,6 +13,8 @@ import { MatchParticipant } from './match-participant/dto/match-participant.dto'
 import { NotificationModule } from './notification/notification.module';
 import { Notification } from './notification/dto/notification.dto';
 import { APP_INTERCEPTOR } from '@nestjs/core';
+import { FriendModule } from './friend/friend.module';
+import { Friend } from './friend/dto/friend.dto';
 require('dotenv').config();
 
 @Module({
@@ -31,10 +33,19 @@ require('dotenv').config();
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
       extra: { ssl: { rejectUnauthorized: false } },
-      entities: [User, Game, Match, MatchParticipant, Elo, Notification],
+      entities: [
+        User,
+        Friend,
+        Game,
+        Match,
+        MatchParticipant,
+        Elo,
+        Notification,
+      ],
       synchronize: true,
       autoLoadEntities: true,
     }),
+    FriendModule,
   ],
   providers: [
     {

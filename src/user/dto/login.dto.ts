@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateGame {
+export class LoginDto {
   @ApiProperty()
-  name: string;
+  email: string;
 
   @ApiProperty()
-  displayValues: { [key: string]: any };
+  password: string;
 }

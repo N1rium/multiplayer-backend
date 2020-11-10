@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Game } from './dto/game.dto';
 import { Repository } from 'typeorm';
 import { CreateGame } from './dto/create-game.dto';
+import { UpdateGameDto } from './dto/update-game.dto';
 
 @Injectable()
 export class GameService {
@@ -16,6 +17,11 @@ export class GameService {
 
   async all(): Promise<Game[]> {
     return this.gameRepository.find();
+  }
+
+  async update(id: string, data: UpdateGameDto): Promise<Game> {
+    await this.gameRepository.update(id, data);
+    return this.gameRepository.findOne(id);
   }
 
   async byId(id: string): Promise<Game> {

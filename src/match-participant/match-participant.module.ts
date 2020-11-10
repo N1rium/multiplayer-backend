@@ -8,5 +8,6 @@ import { MatchParticipant } from './dto/match-participant.dto';
   imports: [TypeOrmModule.forFeature([MatchParticipant])],
   providers: [MatchParticipantService],
   controllers: [MatchParticipantController],
+  exports: [MatchParticipantService],
 })
 export class MatchParticipantModule {}
