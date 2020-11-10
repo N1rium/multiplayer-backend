@@ -8,5 +8,6 @@ import { Elo } from './dto/elo.dto';
   imports: [TypeOrmModule.forFeature([Elo])],
   controllers: [EloController],
   providers: [EloService],
+  exports: [EloService]
 })
 export class EloModule {}
