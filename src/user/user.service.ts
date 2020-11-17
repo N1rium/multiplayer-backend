@@ -111,7 +111,7 @@ export class UserService {
    * @function
    * @param {number} length - Length of the random string.
    */
-  genRandomString(length) {
+  private genRandomString(length) {
     return crypto
       .randomBytes(Math.ceil(length / 2))
       .toString('hex')
@@ -124,7 +124,7 @@ export class UserService {
    * @param {string} password - List of required fields.
    * @param {string} salt - Data to be validated.
    */
-  sha512(password, salt) {
+  private sha512(password, salt) {
     const hash = crypto.createHmac('sha512', salt);
     hash.update(password);
     const value = hash.digest('hex');
@@ -134,7 +134,7 @@ export class UserService {
     };
   }
 
-  saltHashPassword(password) {
+  private saltHashPassword(password) {
     return this.sha512(password, this.genRandomString(16));
   }
 }
