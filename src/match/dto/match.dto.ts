@@ -19,17 +19,17 @@ export class Match {
   @Column({ type: 'varchar', length: 50 })
   name: string;
 
-  @Column({ type: 'varchar' })
-  description: string;
-
   @Column({ type: 'enum', enum: MatchState, default: MatchState.ACTIVE })
   state: MatchState;
 
   @Column({ type: 'boolean', default: false })
   ranked: boolean;
 
+  @Column({ type: 'int', default: -1 })
+  maxParticipants: number;
+
   @CreateDateColumn()
-  creationDate: string;
+  creationDate: Date;
 
   @Column({ type: 'timestamp' })
   endDate: Date;
