@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Match } from 'src/match/dto/match.dto';
+import { GameMode } from 'src/game-mode/dto/game-mode.dto';
 
 @Entity()
 export class Game {
@@ -17,4 +18,10 @@ export class Game {
     match => match.game,
   )
   matches: Match[];
+
+  @OneToMany(
+    () => GameMode,
+    mode => mode.game,
+  )
+  modes: GameMode[];
 }

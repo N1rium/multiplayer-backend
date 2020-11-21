@@ -15,6 +15,7 @@ import { Notification } from './notification/dto/notification.dto';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { FriendModule } from './friend/friend.module';
 import { Friend } from './friend/dto/friend.dto';
+import { GameModeModule } from './game-mode/game-mode.module';
 require('dotenv').config();
 
 @Module({
@@ -46,6 +47,7 @@ require('dotenv').config();
       autoLoadEntities: true,
     }),
     FriendModule,
+    GameModeModule,
   ],
   providers: [
     {

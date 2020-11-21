@@ -1,6 +1,6 @@
-import { Entity, Column, ManyToOne } from 'typeorm';
+import { Entity, Column, ManyToOne, OneToOne } from 'typeorm';
 import { User } from 'src/user/dto/user.dto';
-import { Game } from 'src/game/dto/game.dto';
+import { GameMode } from 'src/game-mode/dto/game-mode.dto';
 
 @Entity()
 export class Elo {
@@ -14,6 +14,6 @@ export class Elo {
   )
   user: User;
 
-  @ManyToOne(() => Game, { primary: true })
-  game: Game;
+  @OneToOne(() => GameMode, mode => mode.elo, { primary: true })
+  mode: GameMode;
 }
